@@ -1,0 +1,26 @@
+{
+  "name": "fullstackopen-part4-exercises",
+  "version": "1.0.0",
+  "description": "Blog list backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-morghan:morghan/fullstackOpen-part4-exercises.git"
+  },
+  "author": "Jerzon Hernandez",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
+  }
+}
