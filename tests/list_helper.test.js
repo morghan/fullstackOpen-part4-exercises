@@ -1,10 +1,13 @@
+const { test, describe } = require('node:test')
+const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
+const { title } = require('node:process')
 
 test('dummy returns one', () => {
   const blogs = []
   const result = listHelper.dummy(blogs)
 
-  expect(result).toBe(1)
+  assert.strictEqual(result, 1)
 })
 
 describe('Total likes', () => {
@@ -17,8 +20,8 @@ describe('Total likes', () => {
       author: 'Michael Chan',
       url: 'https://reactpatterns.com/',
       likes: 7,
-      __v: 0,
-    },
+      __v: 0
+    }
   ]
 
   const listWithManyBlogs = [
@@ -28,7 +31,7 @@ describe('Total likes', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 5,
-      __v: 0,
+      __v: 0
     },
     {
       _id: '5a422b3a1b54a676234d17f9',
@@ -36,7 +39,7 @@ describe('Total likes', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
       likes: 12,
-      __v: 0,
+      __v: 0
     },
     {
       _id: '5a422b891b54a676234d17fa',
@@ -44,26 +47,26 @@ describe('Total likes', () => {
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
       likes: 10,
-      __v: 0,
-    },
+      __v: 0
+    }
   ]
 
-  test('of empty list is zero', () => {
+  test('of empty list, is zero', () => {
     const totalLikes = listHelper.totalLikes(emptyListOfBlogs)
 
-    expect(totalLikes).toBe(0)
+    assert.strictEqual(totalLikes, 0)
   })
 
-  test('of list that has only 1 blog, equals the number of likes of that', () => {
+  test('of list with only 1 blog, equals the number of likes of that', () => {
     const totalLikes = listHelper.totalLikes(listWithOneBlog)
 
-    expect(totalLikes).toBe(listWithOneBlog[0].likes)
+    assert.strictEqual(totalLikes, listWithOneBlog[0].likes)
   })
 
-  test('of list with many blogs is calculated correctly', () => {
+  test('of list with many blogs, is calculated correctly', () => {
     const totalLikes = listHelper.totalLikes(listWithManyBlogs)
 
-    expect(totalLikes).toBe(27)
+    assert.strictEqual(totalLikes, 27)
   })
 })
 
@@ -75,7 +78,7 @@ describe.only('Favorite blog', () => {
       author: 'Michael Chan',
       url: 'https://reactpatterns.com/',
       likes: 7,
-      __v: 0,
+      __v: 0
     },
     {
       _id: '5a422aa71b54a676234d17f8',
@@ -83,7 +86,7 @@ describe.only('Favorite blog', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 5,
-      __v: 0,
+      __v: 0
     },
     {
       _id: '5a422b3a1b54a676234d17f9',
@@ -91,7 +94,7 @@ describe.only('Favorite blog', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
       likes: 12,
-      __v: 0,
+      __v: 0
     },
     {
       _id: '5a422b891b54a676234d17fa',
@@ -99,7 +102,7 @@ describe.only('Favorite blog', () => {
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
       likes: 10,
-      __v: 0,
+      __v: 0
     },
     {
       _id: '5a422ba71b54a676234d17fb',
@@ -107,7 +110,7 @@ describe.only('Favorite blog', () => {
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
       likes: 0,
-      __v: 0,
+      __v: 0
     },
     {
       _id: '5a422bc61b54a676234d17fc',
@@ -115,25 +118,44 @@ describe.only('Favorite blog', () => {
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
       likes: 2,
-      __v: 0,
-    },
+      __v: 0
+    }
   ]
 
+  const oneBlogList = [
+    {
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      __v: 0
+    }
+  ]
   const mostLikedBlog = {
+    _id: '5a422b3a1b54a676234d17f9',
     title: 'Canonical string reduction',
     author: 'Edsger W. Dijkstra',
+    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 12,
+    __v: 0
   }
 
-  test('of empty list', () => {
+  test('of empty list, is null', () => {
     const favoriteBlog = listHelper.favoriteBlog([])
 
-    expect(favoriteBlog).toBe('none')
+    assert.strictEqual(favoriteBlog, null)
   })
 
-  test('of a list of blogs, equals the most liked blog', () => {
+  test('of list with only 1 blog, must be that same blog', () => {
+    const favoriteBlog = listHelper.favoriteBlog(oneBlogList)
+
+    assert.deepStrictEqual(favoriteBlog, oneBlogList[0])
+  })
+
+  test('of list of blogs, must be the most liked blog', () => {
     const favoriteBlog = listHelper.favoriteBlog(blogs)
 
-    expect(favoriteBlog).toEqual(mostLikedBlog)
+    assert.deepStrictEqual(favoriteBlog, mostLikedBlog)
   })
 })

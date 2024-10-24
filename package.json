@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
@@ -21,10 +21,6 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
-    "jest": "^29.3.0",
-    "nodemon": "^2.0.20"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "nodemon": "^3.1.7"
   }
 }

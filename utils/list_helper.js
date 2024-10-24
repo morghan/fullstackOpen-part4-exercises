@@ -3,7 +3,6 @@ const dummy = (blogs) => {
 }
 
 const totalLikes = (blogs) => {
-  console.log('🚀 > totalLikes > blogs', blogs)
   const numberOfBlogs = blogs.length
   if (numberOfBlogs > 0) {
     if (numberOfBlogs === 1) {
@@ -21,32 +20,20 @@ const totalLikes = (blogs) => {
 }
 
 const favoriteBlog = (blogs) => {
-  console.log('🚀 > favoriteBlog > blogs', blogs)
   const numberOfBlogs = blogs.length
   if (numberOfBlogs > 0) {
     if (numberOfBlogs === 1) {
-      return {
-        title: blogs[0].title,
-        author: blogs[0].author,
-        likes: blogs[0].likes,
-      }
+      return blogs[0]
     } else {
       const reducer = (previous, current) => {
-        console.log('🚀 > reducer > previous', previous)
-        console.log('🚀 > reducer > current', current)
-
         return current.likes > previous.likes ? current : previous
       }
       const favoriteBlog = blogs.reduce(reducer)
 
-      return {
-        title: favoriteBlog.title,
-        author: favoriteBlog.author,
-        likes: favoriteBlog.likes,
-      }
+      return favoriteBlog
     }
   } else {
-    return 'none'
+    return null
   }
 }
 
