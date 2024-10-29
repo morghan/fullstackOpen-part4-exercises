@@ -1,8 +1,14 @@
 const mongoose = require('mongoose')
 
 const blogSchema = new mongoose.Schema({
-  author: String,
-  title: String,
+  author: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
   url: String,
   likes: Number
 })

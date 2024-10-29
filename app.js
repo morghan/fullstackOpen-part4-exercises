@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const { MONGO_URL } = require('./utils/config')
 const blogsRouter = require('./controllers/blogs')
 
-mongoose.set('strictQuery', false)
+mongoose.set('strictQuery', true)
 mongoose
   .connect(MONGO_URL)
   .then(() => {
