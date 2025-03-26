@@ -12,14 +12,6 @@ blogsRouter.get('/', async (req, res) => {
   res.json(allBlogs)
 })
 
-const extractTokenFrom = (request) => {
-  const auth = request.get('Authorization')
-  if (auth && auth.startsWith('Bearer ')) {
-    return auth.replace('Bearer ', '')
-  }
-  return null
-}
-
 blogsRouter.post('/', async (req, res) => {
   const { body } = req
 
@@ -27,12 +19,14 @@ blogsRouter.post('/', async (req, res) => {
     return res.status(400).send({ error: 'no info send' })
   }
   try {
-    const decodedToken = jwt.verify(extractTokenFrom(req), process.env.SECRET)
+    // tokenExtractor middleware adds `token` property to the request object
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
     if (!decodedToken) {
       return res.status(401).json({ error: 'invalid token' })
     }
-    const user = await User.findById(decodedToken.id)
+    // userExtractor middleware adds `user` property to the request object
+    const user = req.user
 
     const blog = new Blog({
       author: body.author,
@@ -57,7 +51,35 @@ blogsRouter.post('/', async (req, res) => {
 
 blogsRouter.delete('/:id', async (req, res) => {
   try {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (!decodedToken) {
+      return res.status(401).json({ error: 'invalid token' })
+    }
+
+    const blogToDelete = await Blog.findById(req.params.id)
+    if (!blogToDelete) {
+      return res.status(400).json({ error: 'invalid blog id' })
+    }
+    const blogUserId = blogToDelete.user.toString()
+    const tokenId = decodedToken.id
+
+    if (blogUserId !== tokenId) {
+      return res.status(401).json({
+        error: 'Invalid user. Can not delete a blog that is not yours!',
+      })
+    }
+    // Delete Blog
     await Blog.findByIdAndDelete(req.params.id)
+
+    // Remove deleted Blog from User's blog list
+    // user is added to the request object from tokenExtractor and userExtractor middlewares
+    const user = req.user
+    user.blogs = user.blogs.filter(
+      (blogId) => blogId.toString() !== req.params.id
+    )
+    await user.save()
+
     res.status(204).end()
   } catch (error) {
     console.log(error)
